@@ -9,19 +9,25 @@ svc = None
 hots = None
 bud = None
 
+
 @bot.message_handler(commands=['start'])  # start message
 def start(message):
     conn = sqlite3.connect('user_inputs.sql')
     cur = conn.cursor()
 
-    cur.execute('CREATE TABLE IF NOT EXISTS user_inputs (id int auto_increment primary key, gigi varchar(50), mints varchar(50), sms varchar(50), svc varchar(50), hots varchar(50), bud varchar(50))')
+    cur.execute(
+        'CREATE TABLE IF NOT EXISTS user_inputs (id int auto_increment primary key, gigi varchar(50), mints varchar('
+        '50), sms varchar(50), svc varchar(50), hots varchar(50), bud varchar(50))')
 
     conn.commit()
     cur.close()
     conn.close()
-# Юзер вводит гиги а потом..
+    # Юзер в потом..водит гиги
     bot.send_message(message.chat.id, 'привет мы тебя зарегаем введи gigi')
+
     bot.register_next_step_handler(message, user_gigi)
+
+
 # А потом он ответ идет в гиги, а ему надо писать новый ответ... И так до 6 категории
 def user_gigi(message):
     global gigi
@@ -29,11 +35,13 @@ def user_gigi(message):
     bot.send_message(message.chat.id, 'Введите minuti')
     bot.register_next_step_handler(message, user_mints)
 
+
 def user_mints(message):
     global mints
     mints = message.text.strip()
     bot.send_message(message.chat.id, 'Введите sms')
     bot.register_next_step_handler(message, user_sms)
+
 
 def user_sms(message):
     global sms
@@ -41,11 +49,13 @@ def user_sms(message):
     bot.send_message(message.chat.id, 'Введите service')
     bot.register_next_step_handler(message, user_svc)
 
+
 def user_svc(message):
     global svc
     svc = message.text.strip()
     bot.send_message(message.chat.id, 'Введите hotspot')
     bot.register_next_step_handler(message, user_hots)
+
 
 def user_hots(message):
     global hots
@@ -53,19 +63,22 @@ def user_hots(message):
     bot.send_message(message.chat.id, 'Введите Budget')
     bot.register_next_step_handler(message, user_bud)
 
+
 # Последний ввод сообщения
 def user_bud(message):
     bud = message.text.strip()
 
     conn = sqlite3.connect('user_inputs.sql')
     cur = conn.cursor()
-#global = импорт в других переменных в сообщение и перевод их в базу данных
-    cur.execute("INSERT INTO user_inputs (gigi, mints, sms, svc, hots, bud) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')" % (gigi, mints, sms, svc, hots, bud))
+    # global = импорт в других переменных в сообщение и перевод их в базу данных
+    cur.execute(
+        "INSERT INTO user_inputs (gigi, mints, sms, svc, hots, bud) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')" % (
+            gigi, mints, sms, svc, hots, bud))
     conn.commit()
     cur.close()
     conn.close()
 
-#Предложение посмотреть все данные из БД (чем то надо заменить)
+    # Предложение посмотреть все данные из БД (чем то надо заменить)
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton('Tarifo fil', callback_data='user_inputs'))
     bot.send_message(message.chat.id, 'Polzovatel geniy', reply_markup=markup)
@@ -86,6 +99,7 @@ def callback(call):
     cur.close()
     conn.close()
 
-
     bot.send_message(call.message.chat.id, info)
+
+
 bot.polling(none_stop=True)

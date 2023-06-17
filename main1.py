@@ -17,26 +17,26 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])  # LINK BUTTON
 def bot_message(message):
-    if message.text == '💻 Перейти на сайт' or 'Перейти на сайт' or 'Сайт' or 'сайт':
-        markup = types.InlineKeyboardMarkup()
-        linkbutton = types.InlineKeyboardButton('🌐 Перейти на сайт', url='https://www.lifecell.ua/uk/mobilnij-zvyazok'
-                                                                         '/taryfy/')
-        markup.add(linkbutton)
-        bot.send_message(message.chat.id, 'Натисніть нижче ⬇'.format(message.from_user), reply_markup=markup)
+    if message.text == '🔙 Головне меню':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1 = types.KeyboardButton('💯 Підібрати тариф')
+        btn2 = types.KeyboardButton('💻 Перейти на сайт')
+        markup.row(btn1, btn2)
+        bot.send_message(message.chat.id, '🔙 Головне меню', reply_markup=markup)
     elif message.text == '💯 Підібрати тариф' or 'опитування' or 'тест' or 'подбор' or 'підібрати тариф' or 'тариф':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         startt = types.KeyboardButton('🚀 Розпочати')
         back = types.KeyboardButton('🔙 Головне меню')
         markup.row(startt, back)
         bot.send_message(message.chat.id, '💯 Підібрати тариф\n\nПісля проходження цього опитування, я запропоную вам '
-                                          'декілька тарифів які мають підійти вам.\n\n.' 
+                                          'декілька тарифів які мають підійти вам.\n\n' 
                                           'Ви готові почати?', reply_markup=markup)
-    elif message.text == '🔙 Головне меню':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn1 = types.KeyboardButton('💯 Підібрати тариф')
-        btn2 = types.KeyboardButton('💻 Перейти на сайт')
-        markup.row(btn1, btn2)
-        bot.send_message(message.chat.id, '🔙 Головне меню', reply_markup=markup)
+    elif message.text == '💻 Перейти на сайт' or 'Перейти на сайт' or 'Сайт' or 'сайт':
+        markup = types.InlineKeyboardMarkup()
+        linkbutton = types.InlineKeyboardButton('🌐 Перейти на сайт', url='https://www.lifecell.ua/uk/mobilnij-zvyazok'
+                                                                         '/taryfy/')
+        markup.add(linkbutton)
+        bot.send_message(message.chat.id, 'Натисніть нижче ⬇'.format(message.from_user), reply_markup=markup)
 
     # survey
 
@@ -48,7 +48,7 @@ def bot_message(message):
         markup.row(btn1, btn2, back)
         bot.send_message(message.chat.id, '🚀 Початок підбору', reply_markup=markup)
 
-        bot.send_message(message.chat.id, 'Тут должен быть первый вопрос', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Тут должен быть первый вопрос',)
 
 
 bot.polling(none_stop=True)  # nonstop working
