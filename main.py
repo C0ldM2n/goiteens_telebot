@@ -1,27 +1,37 @@
-from aiogram import Bot, Dispatcher, executor, types
-from dotenv import load_dotenv
-import os
+import telebot
+from telebot import types
+import json
+import functions as fu
 
-load_dotenv()
-bot = Bot(os.getenv('TOKEN'))
-dp = Dispatcher(bot=bot)
+with open('config.json', 'r', encoding='utf-8') as file:
+    config = json.load(file)
 
-
-@dp.message_handler(commands=['start'])
-async def cmd_start(message: types.Message):
-    await message.answer(f'{message.from_user.first_name}, вітаю. З чим можу допомогти?')
-    await message.answer_sticker('CAACAgIAAxkBAAMLZIz0ROIeKV5cHYSaiDWUdIdpFOcAAjgLAAJO5JlLMrFH0tlPjNAvBA')
+bot = telebot.TeleBot(config['token'])
 
 
-@dp.message_handler(content_types=['sticker'])
-async def check_sticker(message: types.Message):
-    await message.answer(f'Ось id цього стікера:) :\n{message.sticker.file_id}')
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    # Отправка приветственного сообщения
+    bot.reply_to(message, "Привет, я бот!")
 
 
-@dp.message_handler()
-async def answer(message: types.Message):
-    await message.reply('Вибачте, але я вас не зрозумів..')
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    # Ваша логика обработки сообщения
+    response = process_message(message.text)
+
+    if response is None:
+        # Ответить, если бот не смог понять сообщение
+        bot.reply_to(message, "Извините, я не понимаю ваше сообщение.")
+    else:
+        # Ответить с обработанным сообщением
+        bot.reply_to(message, response)
+
+def process_message(text):
+    # Здесь вы можете добавить свою собственную логику обработки сообщений
+    # и возвратить обработанное сообщение или None, если бот не понял
+
+    return None
 
 
-if __name__ == '__main__':
-    executor.start_polling(dp)
+bot.polling()
