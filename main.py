@@ -8,11 +8,19 @@ bot = telebot.TeleBot('6052072835:AAGW8CGANoe2lexM0mm_R5kRCGvXel8xZiM')  # use t
 def start(message):
     markup = types.ReplyKeyboardMarkup()
     btn1 = types.KeyboardButton('Пройти опрос')
-    btn2 = types.KeyboardButton('Перейти на сайт')
+    btn2 = types.KeyboardButton(text='Перейти на сайт')
+
     markup.row(btn1, btn2)
     bot.send_message(message.chat.id, f'{message.from_user.first_name}, вітаю 👋. З чим можу допомогти?')
     bot.send_sticker(message.chat.id, "CAACAgIAAxkBAAMLZIz0ROIeKV5cHYSaiDWUdIdpFOcAAjgLAAJO5JlLMrFH0tlPjNAvBA", reply_markup=markup)
     #bot.register_next_step_handler(message, on_click)
+
+
+@bot.message_handler(content_types=['text'])
+def bot_message(message):
+    if message.button == btn2:
+        bot.send_message = InlineKeyboardMarkup [InlineKeyboardButton(text='на гарний сайт', url='https://www.lifecell.ua/') ]
+
 
 #def on_click(message):
  #   if message.text == 'Перейти на сайт':
