@@ -18,7 +18,7 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
-    if message.button == btn2:
+    if message == btn2:
         bot.send_message = InlineKeyboardMarkup [InlineKeyboardButton(text='на гарний сайт', url='https://www.lifecell.ua/') ]
 
 
